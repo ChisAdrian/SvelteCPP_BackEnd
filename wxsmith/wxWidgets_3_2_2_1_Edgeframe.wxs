@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="wxWidgets_3_2_2_1_EdgeFrame">
+		<title>SvelteTemplate</title>
+		<size>432,468</size>
+	</object>
+</wxsmith>
