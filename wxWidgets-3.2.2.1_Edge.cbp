@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SvelteTemplateSql" />
+		<Option pch_mode="2" />
+		<Option compiler="mingwdistrox64" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/SvelteTemplateSql" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="mingwdistrox64" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DwxUSE_WEBVIEW" />
+					<Add directory="C:/Portables/CodeBlocks20.03/wxWidgets-3.2.2.1/lib/gcc_lib/mswu" />
+					<Add directory="C:/Portables/CodeBlocks20.03/Proj/wxWidgets-3.2.2.1_Edge/ocilib-4.6.0-windows/include" />
+					<Add directory="." />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="C:/Portables/CodeBlocks20.03/wxWidgets-3.2.2.1/lib/gcc_lib/mswu" />
+					<Add directory="." />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="libwxmsw32u.a" />
+					<Add library="libwxpng.a" />
+					<Add library="libwxjpeg.a" />
+					<Add library="libwxtiff.a" />
+					<Add library="libwxzlib.a" />
+					<Add library="nanodbc_exec/libnanodbc_static_lib_GCC11.a" />
+					<Add library="ws2_32" />
+					<Add directory="C:/Portables/CodeBlocks20.03/wxWidgets-3.2.2.1/lib/gcc_lib" />
+					<Add directory="." />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-pipe" />
+			<Add option="-mthreads" />
+			<Add option="-D__GNUWIN32__" />
+			<Add option="-D__WXMSW__" />
+			<Add option="-DwxUSE_UNICODE" />
+			<Add option="-DwxUSE_WEBVIEW" />
+			<Add directory="C:/Portables/CodeBlocks20.03/wxWidgets-3.2.2.1/include" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="C:/Portables/CodeBlocks20.03/wxWidgets-3.2.2.1/include" />
+		</ResourceCompiler>
+		<Linker>
+			<Add option="-mthreads" />
+			<Add library="libkernel32.a" />
+			<Add library="libuser32.a" />
+			<Add library="libgdi32.a" />
+			<Add library="libwinspool.a" />
+			<Add library="libcomdlg32.a" />
+			<Add library="libadvapi32.a" />
+			<Add library="libshell32.a" />
+			<Add library="libole32.a" />
+			<Add library="liboleaut32.a" />
+			<Add library="libuuid.a" />
+			<Add library="libcomctl32.a" />
+			<Add library="libwsock32.a" />
+			<Add library="libodbc32.a" />
+			<Add library="libshlwapi.a" />
+			<Add library="libversion.a" />
+			<Add library="liboleacc.a" />
+			<Add library="libuxtheme.a" />
+		</Linker>
+		<Unit filename="nanodbc_exec/mssql_functions.hpp" />
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="wxWidgets_3_2_2_1_EdgeApp.cpp" />
+		<Unit filename="wxWidgets_3_2_2_1_EdgeApp.h" />
+		<Unit filename="wxWidgets_3_2_2_1_EdgeMain.cpp" />
+		<Unit filename="wxWidgets_3_2_2_1_EdgeMain.h" />
+		<Unit filename="wxsmith/wxWidgets_3_2_2_1_Edgeframe.wxs" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="wxWidgets_3_2_2_1_EdgeApp.cpp" main="wxWidgets_3_2_2_1_EdgeFrame" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxFrame wxs="wxsmith/wxWidgets_3_2_2_1_Edgeframe.wxs" src="wxWidgets_3_2_2_1_EdgeMain.cpp" hdr="wxWidgets_3_2_2_1_EdgeMain.h" fwddecl="0" i18n="1" name="wxWidgets_3_2_2_1_EdgeFrame" language="CPP" />
+				</resources>
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

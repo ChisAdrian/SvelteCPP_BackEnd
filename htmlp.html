@@ -1,0 +1,27 @@
+SELECT 
+l.labelnumber AS SN, (SELECT p.productno from product p where p.id=productid) as PartNumber, 
+L.QUANTITY, cst.medium as Cstatus,cst.textid, L.CREATEDON ,L.CREATEDBY ,c.warehouse,
+l.DELIVERYORDERNUMBER,l.DELIVERYORDERTYPE ,PA.PARTNERNO,deliveryorderlineno ,
+c.PERMANENTFLAG ,c.ACTIVE c_active ,l.active l_active,
+STATS.ORDERSTATUS,STATS.short ORDERSTATUS_TXT
+FROM label_automotive l 
+inner join Label_status ls on ls.labelstatus=l.labelstatus 
+left join  text_translation lst on lst.textid=ls.textid and lst.languageid=1033 
+left join  container c on l.relatedcontainer=c.container 
+left join container_status cs on cs.containerstatus=c.containerstatus 
+ left join text_translation cst on cst.textid=cs.textid and cst.languageid=1033
+INNER join  (SELECT PARTNERNO,ID,TEXTID  FROM PARTNER) PA ON SUPPLIERPARTNERID = PA.ID
+INNER join(
+SELECT * FROM 
+(
+	SELECT oh.ORDERNO , os.ORDERSTATUS ,tt.SHORT FROM
+	(SELECT ORDERNO,ORDERSTATUS FROM  ORDER_HEADER) oh
+	INNER JOIN (SELECT ORDERSTATUS,TEXTID  FROM  ORDER_STATUS ) os ON oh.ORDERSTATUS  = os.ORDERSTATUS
+	INNER JOIN (SELECT TEXTID,SHORT FROM TEXT_TRANSLATION WHERE LANGUAGEID = 1033) tt ON tt.TEXTID = os.TEXTID)
+)
+STATS  ON STATS.ORDERNO = l.DELIVERYORDERNUMBER
+WHERE l.active=1 
+AND c.warehouse = 'TSUA'
+AND c.PERMANENTFLAG = 1
+AND STATS.short = 'Completed'
+ 
