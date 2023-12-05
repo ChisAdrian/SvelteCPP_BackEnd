@@ -1,68 +1,77 @@
 <script>
   import { tableH, tableB } from "./store";
   import DataTbl from "./DataTbl.svelte";
-  let name = 'SELECT top 100 MenuChar, MenuDescr, state FROM ACTIVE_MENU;';
+  let name = "SELECT top 100 MenuChar, MenuDescr, state FROM ACTIVE_MENU;";
 
   function fLoadData() {
-    const data = {
-      sql: name
-    };
+    // Define the URL to which you want to make the POST request
+    const url = "http://localhost:5000/data";
 
-    fetch("http://localhost:5000/data", {
+    // Data to be sent in the POST request (can be a JSON object, FormData, etc.)
+
+    // Configure the fetch options, including method, headers, and body for a POST request
+    const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain", // Set the content type based on your API requirements
+        // You may need to include additional headers like authorization tokens, etc.
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.text())
-      .then((json_data) => {
-        console.log(json_data); // Output the server response
+      body: name, // Convert the data to a JSON string for the request body
+    };
 
-        // Parse the JSON string into a JavaScript array of objects
-        var parsed_data = JSON.parse(json_data);
+    let thBody = [];
+    let thD = [];
 
-        console.log(parsed_data);
-        let thBody = [];
-        let thD = [];
-        // Access the properties of each object in the array using a for loop
-        for (var i = 0; i < parsed_data.length; i++) {
-          var data = parsed_data[i];
-          if (i == 0) {
-            for (var key in data) {
-              console.log(key + ": " + data[key]);
-              thD.push(data[key]);
-            }
+    // Use the fetch function to make the POST request
+    fetch(url, options)
+      .then((response) => {
+        // Check if the request was successful (status code in the range 200-299)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.text();
+      })
+      .then((data) => {
+        //console.log("Success:", data);
+
+        let rowsArray = data.split("\n");
+        let nrRows = rowsArray.length;
+        for (var r = 0; r < nrRows; r++) {
+          let oneRowArr = rowsArray[r].split("\t");
+          if (r == 0) {
+            for (var c = 0; c < oneRowArr.length; c++) thD.push(oneRowArr[c]);
           } else {
-            let thBodyr = [];
-            for (var key in data) {
-              thBodyr.push(data[key]);
-            }
-            thBody.push(thBodyr);
+            let thBodyRow = [];
+
+            for (var c = 0; c < oneRowArr.length; c++)
+              thBodyRow.push(oneRowArr[c]);
+
+            thBody.push(thBodyRow);
           }
         }
 
         tableB.set(thBody);
         tableH.set(thD);
-        //	document.getElementById('demo').innerText = json_data;
       })
       .catch((error) => {
+        // Handle errors during the fetch or server-side errors
         console.error("Error:", error);
       });
   }
 </script>
 
 <main>
-
-  <textarea bind:value={name} /><hr>
+  <textarea bind:value={name} />
+  <hr />
   <button on:click={() => fLoadData()}>Exec</button>
   <DataTbl tbl_data_cols={$tableH} tbl_data_rows={$tableB} />
 </main>
 
 <style>
-	textarea {
-		width: 90%;
-    margin-top: auto;
-		height: 80px;
-	}
+  textarea {
+    width: 90%;
+    margin-left: 5%;
+    height: 80px;
+  }
 </style>
