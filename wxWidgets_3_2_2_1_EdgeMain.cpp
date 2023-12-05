@@ -14,20 +14,21 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "json.hpp"
+//#include "json.hpp"
 
 #include <nanodbc_exec/nanodbc.h>
 #include <nanodbc_exec/mssql_functions.hpp>
 #include <thread>         // std::thread
+//#include <wx/msgdlg.h>
 
 std::string connStr = "DRIVER={SQL Server};....";
-using json = nlohmann::json; // Alias the json namespace
+/*using json = nlohmann::json; // Alias the json namespace
+*/
+//#include <algorithm>  // for std::remove_if
 
-#include <algorithm>  // for std::remove_if
-#include <cctype>     // for std::isascii
-
-
-bool isNonAscii(unsigned char c) {
+/*
+bool isNonAscii(unsigned char c)
+{
     return static_cast<int>(c) > 127;
 }
 
@@ -39,9 +40,8 @@ void sanitize(std::string &inputString)
         inputString.end()
     );
 
-
 }
-
+*/
 
 int th_main()
 {
@@ -67,28 +67,33 @@ int th_main()
         res.set_header("Access-Control-Allow-Origin", "*");
         res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         res.set_header("Access-Control-Allow-Headers", "Content-Type");
-        json rec_data = json::parse(req.body);
-        std::string qTXT = rec_data["sql"];
+        //json rec_data = json::parse(req.body);
+        std::string qTXT = req.body;
 
+            //wxMessageBox(qTXT);
         // Create a JSON array
-        json json_data = json::array();
+
+         std::string dataForTable = "";
         auto data =  mssql_select_vector(qTXT,connStr,true);
         for(size_t r=0; r<data.size(); r++)
         {
-            //ELL70 BI D TD EU 2G°
-            json json_row = json::object();
+
             for(size_t c=0; c<data[r].size(); c++)
             {
-                std::string rawData = data[r][c];
-                sanitize(rawData);
-                json_row[ std::to_string(c)  ] = rawData;
+                dataForTable +=  data[r][c];
+                if(c< data[r].size()-1) dataForTable += '\t';
+
             }
-            json_data.push_back(json_row);
+
+
+            dataForTable += '\n';
         }
-        res.set_content(json_data.dump(), "application/json");
+
+
+        res.set_content(dataForTable, "text/plain");
     });
 
-    // Start the server and listen on port 8080
+    // Start the server and listen on port
     server.listen("localhost", 5000);
     return 0;
 }
@@ -155,27 +160,27 @@ wxWidgets_3_2_2_1_EdgeFrame::wxWidgets_3_2_2_1_EdgeFrame(wxWindow *parent, wxWin
     Create(parent, id, _("SvelteTemplate"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
     SetClientSize(wxSize(432,468));
     //*)
-        SetIcon(wxIcon("aaaa"));
+    SetIcon(wxIcon("aaaa"));
 
-        std::ifstream inFile;
-        inFile.open("source.html"); //open the input file
-        std::stringstream strStream;
-        strStream << inFile.rdbuf(); //read the file
-        std::string str = strStream.str(); //str holds the content of the file
+    std::ifstream inFile;
+    inFile.open("source.html"); //open the input file
+    std::stringstream strStream;
+    strStream << inFile.rdbuf(); //read the file
+    std::string str = strStream.str(); //str holds the content of the file
 
-        webView = wxWebView::New(this, ID_WEBW); //, "about:blank", wxDefaultPosition, wxDefaultSize, wxWebViewBackendEdge);
+    webView = wxWebView::New(this, ID_WEBW); //, "about:blank", wxDefaultPosition, wxDefaultSize, wxWebViewBackendEdge);
 
 
-        webView->EnableHistory(false);
-        int width, height;
+    webView->EnableHistory(false);
+    int width, height;
 
-     this->GetSize(&width,&height)		;
-     webView->SetSize(width,height);
+    this->GetSize(&width,&height)		;
+    webView->SetSize(width,height);
 
-        webView->SetPage(str, "");
+    webView->SetPage(str, "");
 
-  std::thread http_Serv (th_main);     // spawn new thread that calls th_main()
- http_Serv.detach();
+    std::thread http_Serv (th_main);     // spawn new thread that calls th_main()
+    http_Serv.detach();
 }
 
 wxWidgets_3_2_2_1_EdgeFrame::~wxWidgets_3_2_2_1_EdgeFrame()
